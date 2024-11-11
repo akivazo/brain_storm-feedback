@@ -89,9 +89,9 @@ def test_delete_feedbacks(client: FlaskClient):
 
     response = client.get("/feedbacks/123")
 
-    assert response.status_code == 404
+    assert response.status_code == 200
 
-    assert "error" in response.get_json()
+    assert [] == response.get_json()["feedbacks"]
 
     response = client.get("/feedbacks/345")
 
