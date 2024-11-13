@@ -55,7 +55,7 @@ def get_feedbacks(idea_id: str):
 
     if feedbacks:
         return jsonify(feedbacks), 302
-    return jsonify({"feedbacks": []}), 200
+    return jsonify({"feedbacks": []}), 204
 
 @server.route("/feedback/<idea_id>/<feedback_id>", methods=["DELETE"])
 def delete_feedback(idea_id, feedback_id: str):
