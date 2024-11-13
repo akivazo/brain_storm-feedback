@@ -17,46 +17,46 @@ def client():
 
 
 def test_add_feedback(client: FlaskClient):
-    response = client.post("/feedback", json={"idea_id": "123", "owner_id": "akiva1", "content": "feedback"})
+    response = client.post("/feedback", json={"idea_id": "123", "owner_name": "akiva1", "content": "feedback"})
 
     assert response.status_code == 201
     assert "id" in response.get_json()
 
 def test_add_feedback_missing_data(client: FlaskClient):
-    response = client.post("/feedback", json={"owner_id": "akiva1", "content": "feedback"})
+    response = client.post("/feedback", json={"owner_name": "akiva1", "content": "feedback"})
 
     assert response.status_code == 400
     assert "error" in response.get_json()
 
 def test_get_feedbacks(client: FlaskClient):
-    id1 = client.post("/feedback", json={"idea_id": "123", "owner_id": "akiva1", "content": "feedback"}).get_json()["id"]
-    id2 = client.post("/feedback", json={"idea_id": "123", "owner_id": "akiva2", "content": "feedback"}).get_json()["id"]
-    id3 = client.post("/feedback", json={"idea_id": "345", "owner_id": "akiva3", "content": "feedback"}).get_json()["id"]
+    id1 = client.post("/feedback", json={"idea_id": "123", "owner_name": "akiva1", "content": "feedback"}).get_json()["id"]
+    id2 = client.post("/feedback", json={"idea_id": "123", "owner_name": "akiva2", "content": "feedback"}).get_json()["id"]
+    id3 = client.post("/feedback", json={"idea_id": "345", "owner_name": "akiva3", "content": "feedback"}).get_json()["id"]
 
     response = client.get("/feedbacks/123")
 
     assert response.status_code == 302
     feedbacks = response.get_json()["feedbacks"]
 
-    assert feedbacks == [{"owner_id": "akiva1", "content": "feedback", "id": id1}, {"owner_id": "akiva2", "content": "feedback", "id": id2}]
+    assert feedbacks == [{"owner_name": "akiva1", "content": "feedback", "id": id1}, {"owner_name": "akiva2", "content": "feedback", "id": id2}]
 
     response = client.get("/feedbacks/345")
 
     assert response.status_code == 302
     feedbacks = response.get_json()["feedbacks"]
 
-    assert feedbacks == [{"owner_id": "akiva3", "content": "feedback", "id": id3}]
+    assert feedbacks == [{"owner_name": "akiva3", "content": "feedback", "id": id3}]
 
 def test_delete_feedback(client: FlaskClient):
-    id1 = client.post("/feedback", json={"idea_id": "123", "owner_id": "akiva1", "content": "feedback"}).get_json()["id"]
-    id2 = client.post("/feedback", json={"idea_id": "123", "owner_id": "akiva2", "content": "feedback"}).get_json()["id"]
-    client.post("/feedback", json={"idea_id": "345", "owner_id": "akiva3", "content": "feedback"}).get_json()["id"]
+    id1 = client.post("/feedback", json={"idea_id": "123", "owner_name": "akiva1", "content": "feedback"}).get_json()["id"]
+    id2 = client.post("/feedback", json={"idea_id": "123", "owner_name": "akiva2", "content": "feedback"}).get_json()["id"]
+    client.post("/feedback", json={"idea_id": "345", "owner_name": "akiva3", "content": "feedback"}).get_json()["id"]
     
     response = client.get("/feedbacks/123")
 
     feedbacks = response.get_json()["feedbacks"]
 
-    assert feedbacks == [{"owner_id": "akiva1", "content": "feedback", "id": id1}, {"owner_id": "akiva2", "content": "feedback", "id": id2}]
+    assert feedbacks == [{"owner_name": "akiva1", "content": "feedback", "id": id1}, {"owner_name": "akiva2", "content": "feedback", "id": id2}]
 
     response = client.delete(f"/feedback/123/{id1}")
 
@@ -68,13 +68,13 @@ def test_delete_feedback(client: FlaskClient):
 
     feedbacks = response.get_json()["feedbacks"]
 
-    assert feedbacks == [{"owner_id": "akiva2", "content": "feedback", "id": id2}]
+    assert feedbacks == [{"owner_name": "akiva2", "content": "feedback", "id": id2}]
 
 def test_delete_feedbacks(client: FlaskClient):
-    client.post("/feedback", json={"idea_id": "123", "owner_id": "akiva1", "content": "feedback"})
-    client.post("/feedback", json={"idea_id": "123", "owner_id": "akiva2", "content": "feedback"})
-    client.post("/feedback", json={"idea_id": "345", "owner_id": "akiva3", "content": "feedback"})
-    client.post("/feedback", json={"idea_id": "345", "owner_id": "akiva4", "content": "feedback"})
+    client.post("/feedback", json={"idea_id": "123", "owner_name": "akiva1", "content": "feedback"})
+    client.post("/feedback", json={"idea_id": "123", "owner_name": "akiva2", "content": "feedback"})
+    client.post("/feedback", json={"idea_id": "345", "owner_name": "akiva3", "content": "feedback"})
+    client.post("/feedback", json={"idea_id": "345", "owner_name": "akiva4", "content": "feedback"})
 
     response = client.get("/feedbacks/123")
 

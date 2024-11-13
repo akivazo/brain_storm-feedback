@@ -8,7 +8,7 @@ from typing import Type
 class FeedbackSchema(BaseModel):
     id: str
     idea_id: str
-    owner_id: str
+    owner_name: str
     content: str
 
 server = Flask(__name__)
